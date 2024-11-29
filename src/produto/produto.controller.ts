@@ -1,10 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { ProdutoService } from './produto.service';
 import { CreateProdutoDto } from './dto/create-produto.dto';
 import { UpdateProdutoDto } from './dto/update-produto.dto';
 import { CompraProdutoDto } from './dto/compra-produto.dto';
 import { VendaProdutoDto } from './dto/venda-produto.dto';
 import { Operacao, Produto } from '@prisma/client';
+import { create } from 'domain';
 
 @Controller('produto')
 export class ProdutoController {
@@ -26,7 +35,10 @@ export class ProdutoController {
   }
 
   @Patch(':id')
-  atualizar(@Param('id') id: string, @Body() updateProdutoDto: UpdateProdutoDto): Promise<Produto> {
+  atualizar(
+    @Param('id') id: string,
+    @Body() updateProdutoDto: UpdateProdutoDto,
+  ): Promise<Produto> {
     return this.produtoService.atualizar(+id, updateProdutoDto);
   }
 
@@ -35,13 +47,19 @@ export class ProdutoController {
     return this.produtoService.desativar(+id);
   }
 
-  @Post(':id/comprar')
-  comprarProdutos(@Body() compraProdutoDto: CompraProdutoDto, @Param('id') id: string): Promise<Operacao> {
+  @Post('/comprar/:id')
+  comprarProdutos(
+    @Body() compraProdutoDto: CompraProdutoDto,
+    @Param('id') id: string,
+  ): Promise<Operacao> {
     return this.produtoService.comprarProdutos(+id, compraProdutoDto);
   }
 
   @Post(':id/vender')
-  venderProdutos(@Body() vendaProdutoDto: VendaProdutoDto, @Param('id') id: string): Promise<Operacao> {
+  venderProdutos(
+    @Body() vendaProdutoDto: VendaProdutoDto,
+    @Param('id') id: string,
+  ): Promise<Operacao> {
     return this.produtoService.venderProdutos(+id, vendaProdutoDto);
   }
 }
